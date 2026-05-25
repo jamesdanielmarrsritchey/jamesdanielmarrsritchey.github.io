@@ -1,11 +1,169 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>James Daniel Marrs Ritchey</title>
+<meta charset="UTF-8">
+<title>James Daniel Marrs Ritchey - Website</title>
+<style>
+body {
+    min-height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transition: background-image 1s ease-in-out;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    box-sizing: border-box;
+    padding: 5vh 5vw;
+}
+
+.page_box {
+   /* border: 14px solid rgba(255, 255, 255, 0.12); */
+    background: transparent;
+    padding: 34px;
+    text-align: center;
+    width: min(38vw, 620px);
+    min-height: 32vh;
+    box-sizing: border-box;
+    color: rgba(255, 255, 255, 0.82);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.website_name {
+    font-size: clamp(38px, 5vw, 72px);
+    margin-bottom: 34px;
+    letter-spacing: 2px;
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.site_link,
+.disabled_link {
+    border: 5px solid rgba(255, 255, 255, 0.58);
+    color: rgba(255, 255, 255, 0.82);
+    text-decoration: none;
+    margin: 5px;
+    padding: 5px;
+    display: block;
+}
+
+.site_link:hover {
+    background: rgba(255, 255, 255, 0.82);
+    color: rgba(0, 0, 0, 0.9);
+    text-decoration: none;
+}
+
+.disabled_link {
+    color: rgba(255, 255, 255, 0.34);
+    border-color: rgba(255, 255, 255, 0.24);
+}
+
+@media (max-width: 700px), (orientation: portrait) {
+    body {
+        padding: 4vh 5vw;
+    }
+
+    .page_box {
+        width: 100%;
+
+        padding: 28px;
+    }
+
+    .website_name {
+        font-size: clamp(34px, 11vw, 58px);
+    }
+}
+</style>
 </head>
 <body>
 
-<p>My website is currently hosted at <a href="https://jamesdanielmarrsritchey.roy.gôv.net/">https://jamesdanielmarrsritchey.roy.gôv.net/</a>.</p>
+<div class="page_box">
+    <div id="website_name" class="website_name"></div>
+    <div id="link_area" class="link_area"></div>
+</div>
+
+<script>
+const websiteName = "James Daniel Marrs Ritchey";
+
+const backgroundImages = [
+    "slide-1.jpg",
+    "slide-2.jpg",
+    "slide-3.jpg"
+];
+
+const links = {
+    Profile: "https://profile.jamesdanielmarrsritchey.roy.xn--gv-8ja.net",
+    Blog: "",
+    Forum: ""
+};
+
+let currentImageIndex = 0;
+
+function imageExists(url, callback) {
+    const img = new Image();
+
+    img.onload = function () {
+        callback(true);
+    };
+
+    img.onerror = function () {
+        callback(false);
+    };
+
+    img.src = url;
+}
+
+function setBackgroundImage() {
+    if (backgroundImages.length === 0) {
+        return;
+    }
+
+    const imageUrl = backgroundImages[currentImageIndex];
+
+    imageExists(imageUrl, function (exists) {
+        if (exists === true) {
+            document.body.style.backgroundImage =
+                "linear-gradient(rgba(0,0,0,0.25), rgba(0,0,0,0.45)), url('" + imageUrl + "')";
+        } else {
+            document.body.style.backgroundImage = "";
+        }
+    });
+
+    currentImageIndex = currentImageIndex + 1;
+
+    if (currentImageIndex >= backgroundImages.length) {
+        currentImageIndex = 0;
+    }
+}
+
+function createLinks() {
+    const linkArea = document.getElementById("link_area");
+
+    for (const label in links) {
+        if (links[label] !== "") {
+            const link = document.createElement("a");
+            link.className = "site_link";
+            link.href = links[label];
+            link.textContent = label;
+            linkArea.appendChild(link);
+        } else {
+            const span = document.createElement("span");
+            span.className = "disabled_link";
+            span.textContent = label;
+            linkArea.appendChild(span);
+        }
+    }
+}
+
+document.getElementById("website_name").textContent = websiteName;
+createLinks();
+
+if (backgroundImages.length > 0) {
+    setBackgroundImage();
+    setInterval(setBackgroundImage, 3000);
+}
+</script>
 
 </body>
 </html>
